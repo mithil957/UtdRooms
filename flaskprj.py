@@ -300,9 +300,6 @@ def get_class_data(class_list, course_name_list, data=tot_data):
 
 app = Flask(__name__)
 
-# Set the secret key to some random bytes. Keep this really secret! lol
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
 @app.route("/f3")
 def my_form():
 	curr_time = ':'.join(str(datetime.now().time()).split(':')[:2]) + ':00' #get the curr time
