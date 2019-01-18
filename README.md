@@ -1,4 +1,4 @@
-# Utd Rooms
+# UTD Rooms
 Utility tool to find open locations at UTD, see links for professor ratings, and links for grade distribution of courses. 
 
 ### How are open locations determined? 
