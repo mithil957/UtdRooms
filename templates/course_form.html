@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+
+
+
+	<title>Course Search</title>
+</head>
+<body>
+
+
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #644f7a;">
+  <a class="navbar-brand" href="#">
+    <img src="{{url_for('static',filename='logo_1.svg')}}" width="40" height="40" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="/">Time Slots</a>
+      <a class="nav-item nav-link" href="/f3">Empty Rooms</a>
+	  <a class="nav-item nav-link" href="/f2">Room Schedule</a>
+      
+	  <a class='nav-item nav-link active' href='/f4'>Course Search<span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/f1">Professor Information</a>
+	  <a class="nav-item nav-link" href="/f5">Contact Me</a>
+      
+    </div>
+  </div>
+</nav>  
+
+	
+<div class='container'>
+<br>
+<h1 class="display-4" style="color: #000;">Course Search</h1>
+
+{% if noselection %}
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Warning!</strong> Please make a selection 
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+<form method='POST'>
+
+
+<p class="lead" style="color: #000;">
+  Search by course number</p>
+<div class="input-group mb-3">
+  <select class="selectpicker" multiple data-live-search="true" data-actions-box="true" data-width='auto' name='coursenums'>
+  {% for i in nums %}
+     <option data-subtext="">{{i}}</option>
+  {% endfor %}
+</select>
+</div>
+<p class="lead" style="color: #000;">
+  Or Search by class name</p>
+<div class="input-group mb-3">
+  <select class="selectpicker" multiple data-live-search="true" data-actions-box="true" data-width='auto' name='classnames'>
+  {% for i in classNames %}
+     <option data-subtext="">{{i}}</option>
+  {% endfor %}
+</select>
+</div>
+
+
+<button type="submit" class="btn btn-outline-success">Submit</button>
+<hr>
+
+<small>Tool to help you find your courses</small>
+</form>
+</div>
+
+</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+</body>
+</html>

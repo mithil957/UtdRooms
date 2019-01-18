@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+	<title>Professor Information</title>
+
+   <style>
+nav {
+    background-color: #009fe3;
+    width: 100%;
+    box-sizing: content-box;
+    }
+	
+body {
+    margin:0;
+    width: 100%;
+}
+	
+</style>
+
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark">
+	<div class='container-fluid'>
+ <a class="navbar-brand" href="#">
+    <img src="{{url_for('static',filename='logo_1.svg')}}" width="40" height="40" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+	  <a class="nav-item nav-link" href="/">Time Slots</a>
+      <a class="nav-item nav-link" href="/f3">Empty Rooms</a>
+	  <a class="nav-item nav-link" href="/f2">Room Schedule</a>
+	  <a class="nav-item nav-link" href='/f4'>Course Search</a>
+      <a class="nav-item nav-link active" href="/f1">Professor Information<span class="sr-only">(current)</span></a>
+	  <a class="nav-item nav-link" href="/f5">Contact Me</a>
+      
+      
+      </div>
+    </div>
+  </div>
+  
+</nav>  
+	<div class='container-fluid'>
+	
+	<br>
+	<button onclick="window.location.href='/f1'" class="btn btn-outline-success">Search Again
+	</button>
+	<br>
+   
+
+	{% for k in nums %}
+  {% if data[k] == 'Nothing Found' %}
+    {% if rmpData[profs[k]][0] != 'Not found' %}
+          <h2>{{profs[k]}}
+          
+          {% for i in rmpData[profs[k]] %}
+            <small><a style="color: #009fe3;text-decoration: none;font-size: 20px;" href="{{i}}" target="_blank"> (Rate my prof link)</a></small>
+          
+		  {% endfor %}
+
+
+          </h2>
+          {% else %}
+
+          <h2>{{profs[k]}}</h2>
+			
+          {% endif %}
+
+  {% else %}
+  
+{% if k == 0 %}
+<br>
+{% endif %}
+	<div style="overflow-y: auto;">
+    <table class="table table-hover">
+  		<thead>
+  			<tr>
+
+
+          {% if rmpData[profs[k]][0] != 'Not found' %}
+   				<h2>{{profs[k]}}
+          
+          {% for i in rmpData[profs[k]] %}
+            <small><a style="color: #009fe3;text-decoration: none;font-size: 20px;" href="{{i}}" target="_blank"> (Rate my prof link)</a></small>
+          {% endfor %}
+
+
+          </h2>
+          {% else %}
+
+          <h2>{{profs[k]}}</h2>
+
+          {% endif %}
+          
+  			</tr>
+    <tr>
+      <th scope="col">Class Number</th>
+      <th scope="col">Class Title</th>
+      <th scope="col">Days</th>
+      <th scope="col">Times</th>
+      <th scope="col">Location</th>
+      
+    </tr>
+
+  		</thead>
+
+  <tbody>
+  	{% for i in data[k] %}
+  	<tr>
+      <td>{{i[0]}}</td>
+      <td>{{i[1]}}</td>
+      <td>{{i[2]}}</td>
+      <td>{{i[3]}}</td>
+      <td>{{i[4]}}</td>
+    </tr>
+    {% endfor %}
+
+  </tbody>
+</table>
+
+</div>
+
+
+{% endif %}
+{% endfor %}
+
+</div>
+
+
+
+
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+</body>
+</html>

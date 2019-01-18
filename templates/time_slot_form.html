@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+	
+
+
+	<title>Time Slots</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #37AA9C;">
+  <a class="navbar-brand" href="#">
+    <img src="{{url_for('static',filename='logo_1.svg')}}" width="40" height="40" alt="">
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Time Slots<span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/f3">Empty Rooms</a>
+	  <a class="nav-item nav-link" href="/f2">Room Schedule</a>
+      
+	  <a class='nav-item nav-link' href='/f4'>Course Search</a>
+      <a class="nav-item nav-link" href="/f1">Professor Information</a>
+	  <a class="nav-item nav-link" href="/f5">Contact Me</a>
+      
+    </div>
+	
+  </div>
+</nav>	
+
+
+<div class='container'>
+
+<br>
+<h1 class="display-4" style="color: #000;">Time Slots</h1>
+{% if invalidSub %}
+	<div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>Warning!</strong> Make sure values are entered
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{% endif %}
+
+<form method='POST'>
+  <div class="form-group">
+    <p class="lead" style="color: #000;">
+  Choose a day
+</p>
+  </div>
+  <div class="input-group mb-3">
+  
+  <select class="selectpicker" name="days" data-width='auto'>
+    <option value="Monday">Monday</option>
+    <option value="Tuesday">Tuesday</option>
+    <option value="Wednesday">Wednesday</option>
+    <option value="Thursday">Thursday</option>
+    <option value="Friday">Friday</option>
+    <option value="Saturday">Saturday</option>
+    <option value="Sunday">Sunday</option>
+  </select>
+</div>
+
+<p class="lead" style="color: #000;">
+  Choose minimum time slot (in minutes)</p>
+<div class="input-group mb-3" style="width: 50%;">
+  <input class="form-control" type="number" value="30" id="example-number-input" name='min-time'>
+</div>
+
+<p class="lead" style="color: #000;">
+  Select building preference</p>
+<div class="input-group mb-3">
+  <select class="selectpicker" multiple data-live-search="true" data-actions-box="true" data-width='auto' name='locations'>
+  {% for i,j in building %}
+     <option data-subtext="{{i}}">{{j}}</option>
+  {% endfor %}
+</select>
+</div>
+
+
+<button type="submit" class="btn btn-outline-success">Submit</button>
+<hr>
+
+<small>Tool to find periods of time(time slots) for when the room might be potentially open. This app only finds rooms that have no lecture(lab locations are not shown because they are usually locked). So, the rooms may or may not be unlocked. It is not prefect! </small>
+<hr>
+<small> Email questions and suggestions at utdRooms@gmail.com or use Contact Me page </small>
+</form>
+</div>
+
+
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+</body>
+</html>
