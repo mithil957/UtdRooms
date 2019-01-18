@@ -23,7 +23,7 @@ If you would like to see the process for this project: check out the. ipynb note
 
 ### Overview of the process:
   - UTD Coursebook has an advanced search feature with many filters. Clicking on these filters and searching will produced a 'URL' with a predictable pattern and the page will show a table with information we asked for. So, we generate all the possible URLs and scrape all data from the tables
-    *Scraping all the data one by one would take a lot of time. So, I used threading to speed things up. 
+    * Scraping all the data one by one would take a lot of time. So, I used threading to speed things up. 
   
   - Now we have all the data for every class taught at UTD for that semester. This data can then be manipulated by the functions created in the ipynb notebook. Those functions can then be used to make those features on the website.
   
