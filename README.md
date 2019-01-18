@@ -12,12 +12,12 @@ Utility tool to find open locations at UTD, see links for professor ratings, and
 
 
 I made this website so it could provide some utility to students at UTD. The features are:
-- Time Slots: shows the time periods for when a room is open
-- Empty Rooms: like Time Slots, but it is mainly for students who want to use a room for an exact amount of time
-- Room Schedule: shows all the classes that will occur in given room for a particular day
-- Course Search: displays all the section numbers for a class with the RateMyProf link and UTD Grades link, so it will help when figuring what classes to take 
-- Professor Information: returns all the classes a professor is teaching and their RateMyProf link
-- Contact Me: sends an email to utdRooms@gmail.com so I can try to provide feedback 
+- *Time Slots*: shows the time periods for when a room is open
+- *Empty Rooms*: like Time Slots, but it is mainly for students who want to use a room for an exact amount of time
+- *Room Schedule*: shows all the classes that will occur in given room for a particular day
+- *Course Search*: displays all the section numbers for a class with the RateMyProf link and UTD Grades link, so it will help when figuring what classes to take 
+- *Professor Information*: returns all the classes a professor is teaching and their RateMyProf link
+- *Contact Me*: sends an email to utdRooms@gmail.com so I can try to provide feedback 
 
 If you would like to see the process for this project: check out the. ipynb notebook or click [here](https://nbviewer.jupyter.org/github/mithil957/utdRooms/blob/master/courseBook.ipynb)
 
