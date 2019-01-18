@@ -1,13 +1,13 @@
 # Utd Rooms
 Utility tool to find open locations at UTD, see links for professor ratings, and links for grade distribution of courses. 
 
-## How are open locations determined? 
+### How are open locations determined? 
 - I scraped all UTD coursebook (tool that shows information about class times, professor, and location). So, anytime there is no lecture happening then the class is probably open. "Probably" because some rooms might be locked. 
 
-## Links for professor ratings?
+### Links for professor ratings?
 - I scraped for RMP (Rate My Professor) links for all the UTD professors. Those links are shown in the Professor Information and Course Search features of the website.
 
-## Grade Distribution for courses?
+### Grade Distribution for courses?
 - A wonderful site called UTD grades shows grade distributions for courses. So, I added links to those grade distributions to the Course Search feature of the website.
 
 
