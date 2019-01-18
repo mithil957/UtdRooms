@@ -29,7 +29,7 @@ If you would like to see the process for this project: check out the. ipynb note
   
 Tools used: Python, Jupyter Notebook, Flask, HTML, CSS, Bootstrap 
 
-*I had a lot of fun making this tool and I learned a lot about web development and data scraping along the way. 
+I had a lot of fun making this tool and I learned a lot about web development and data scraping along the way. 
 
 
 
