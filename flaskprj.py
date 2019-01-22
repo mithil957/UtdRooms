@@ -7,9 +7,6 @@ def remove_lead_trail_white_space(some_string):
     return some_string.lstrip().rstrip()
 
 
-#the data
-tot_data = pd.read_csv('19_s_courseData_csv')
-
 
 #get rid of data with no value
 tot_data.drop(tot_data[tot_data["Time"] == ''].index, inplace=True)
@@ -23,7 +20,6 @@ building_names = ['Activity Center', 'Administration', 'Arts and Humanities 1', 
 
 #---------------------------------------------------------------------------------------------------------
 #read in rate my prof data
-rmp_df = pd.read_csv('rmp_df')
 
 prof_rmp_id = {} #put all dataframe info into dict
 for i in range(len(rmp_df)):
@@ -505,7 +501,7 @@ app.config.update(dict(
     MAIL_USE_TLS = False,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'utdRooms@gmail.com',
-    MAIL_PASSWORD = 'utdrooms1232P#'
+    MAIL_PASSWORD = 'wrongPassword'
 ))
 
 mail = Mail(app)
@@ -520,7 +516,7 @@ def process_email():
 	email = request.form.get('email')
 	name = request.form.get('name')
 	email_body = request.form.get('content')
-	if(len(email) < 9): #7 b/c @.com is 5 charcs then 5 more just to make sure
+	if(len(email) < 12): #7 b/c @.com is 5 charcs then 5 more just to make sure
 		return render_template('emailForm.html', invalidEmail = True)
 	else:
 		wholeMesg = email + '\n' + name + '\n' + email_body
@@ -529,4 +525,4 @@ def process_email():
 		mail.send(msg)
 		return render_template('emailForm.html', emailSent = True)
 	
-#Another feature can be added which can help students figure out course info for next semester 
+#Another feature can be added which can help students figure out course info for next semester,Course Planner
