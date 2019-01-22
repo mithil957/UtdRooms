@@ -501,7 +501,7 @@ app.config.update(dict(
     MAIL_USE_TLS = False,
     MAIL_USE_SSL = True,
     MAIL_USERNAME = 'utdRooms@gmail.com',
-    MAIL_PASSWORD = 'wrongPassword'
+    MAIL_PASSWORD = 'tryMe123'
 ))
 
 mail = Mail(app)
