@@ -7,6 +7,8 @@ def remove_lead_trail_white_space(some_string):
     return some_string.lstrip().rstrip()
 
 
+#load in the data
+tot_data = pd.read_csv('19_s_courseData_csv')
 
 #get rid of data with no value
 tot_data.drop(tot_data[tot_data["Time"] == ''].index, inplace=True)
@@ -20,6 +22,7 @@ building_names = ['Activity Center', 'Administration', 'Arts and Humanities 1', 
 
 #---------------------------------------------------------------------------------------------------------
 #read in rate my prof data
+# rmp_df = pd.read_csv('rmp_csv') => this data can be obtained by running the ipynb notebook
 
 prof_rmp_id = {} #put all dataframe info into dict
 for i in range(len(rmp_df)):
