@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, url_for, redirect, flash
 import pandas as pd
 from datetime import datetime, timedelta
+import smtplib
 
 
 def remove_lead_trail_white_space(some_string):
@@ -58,58 +59,21 @@ utdGrades_prof_urls = {i:utdGrades_baseUrl + '%20'.join(i.split()) if i.find(','
 building_tags = {x:y for x,y in zip(sorted(all_buildings),building_names)}
 all_possible_locs = set(map(lambda x: remove_lead_trail_white_space(x), tot_data['Location']))
 
+lab_locs = set()
+for i in range(len(tot_data)):
+    temp = tot_data.iloc[i]
+    if(temp['Class Title'].find('Lab') != -1 or temp['Class Title'].find('lab') != -1):
+        lab_locs.add(temp['Location'])
+#used to find all the classes that are labs, will be used to filter out labs since most of the times there are locked
+
+building_tags = {x:y for x,y in zip(sorted(all_buildings),building_names)} #dict that ties building tag to name{'FO':'Founders'..}
+all_possible_locs = set(tot_data['Location']) #get all possible rooms
+
 loc_tags = {}
-for i in all_possible_locs:
+for i in all_possible_locs: #loop used to assign room number to building name {'FO 1.315': 'Founders'}
     loc_tags[i] = building_tags[i.split()[0]]
-
 loc_tags = dict(sorted(loc_tags.items()))
-
-lab_locs = {'ATC 1.406',
- 'ATC 1.910',
- 'ATC 3.601',
- 'ATC 3.910',
- 'ATC 3.914',
- 'BE 2.330',
- 'ECSN 3.108',
- 'ECSN 3.110',
- 'ECSN 3.112',
- 'ECSN 3.114',
- 'ECSN 3.118',
- 'ECSN 3.120',
- 'ECSN 4.324',
- 'ECSS 2.103',
- 'ECSS 2.312',
- 'ECSS 3.618',
- 'ECSW 1.315',
- 'ECSW 2.315',
- 'ECSW 2.325',
- 'ECSW 2.335',
- 'ECSW 3.325',
- 'ECSW 3.335',
- 'ECSW 4.315',
- 'ECSW 4.325',
- 'FN 2.102',
- 'FN 2.212',
- 'FN 2.214',
- 'FO 3.222',
- 'GR 4.204',
- 'GR 4.708',
- 'JO 3.209',
- 'ML1 1.110',
- 'ML1 1.114',
- 'SLC 1.102',
- 'SLC 1.202','SLC 1.205','SLC 1.206',
- 'SLC 1.211',
- 'SLC 2.202','SLC 2.203','SLC 2.206',
- 'SLC 2.207',
- 'SLC 2.215',
- 'SLC 2.216','SLC 2.302',
- 'SLC 2.303',
- 'SLC 2.304','SLC 3.102',
- 'SLC 3.202','SLC 3.203',
- 'SLC 3.210','SLC 3.215','SLC 3.220'}
-
-
+#--------------------------------------------------------------------------------------------------------
 
 tot_data['Location'] = list(map(remove_lead_trail_white_space, tot_data['Location'])) #strips leading and trailing white space, set operations work
 tot_data['Time'] = list(map(remove_lead_trail_white_space, tot_data['Time']))
@@ -280,12 +244,6 @@ def get_class_data(class_list, course_name_list, data=tot_data):
             class_data_list.append(temp)
 
     return class_data_list
-
-
-
-
-
-
 
 
 
@@ -496,36 +454,296 @@ def course_data_form():
 	return render_template('course_data_form.html', data=tot_data_to_print, utdGradesDict=utd_grades_urls)
 
 	
-from flask_mail import Mail, Message
+#For sending emails----------------------------------------------------------
+# smtpserver = smtplib.SMTP("smtp.gmail.com", 587)
+# smtpserver.ehlo()
+# smtpserver.starttls()
+# smtpserver.ehlo()
+# smtpserver.login('utdRooms@gmail.com', 'GoAheadAndTryItOut@100%')
 
-app.config.update(dict(
-    MAIL_SERVER = 'smtp.googlemail.com',
-    MAIL_PORT = 465,
-    MAIL_USE_TLS = False,
-    MAIL_USE_SSL = True,
-    MAIL_USERNAME = 'utdRooms@gmail.com',
-    MAIL_PASSWORD = 'tryMe123'
-))
 
-mail = Mail(app)
+# @app.route('/f5')
+# def email_form():
+# 	return render_template('emailForm.html')
 
-@app.route('/f5')
-def email_form():
-	return render_template('emailForm.html')
-	
+# @app.route('/f5', methods=['POST'])
+# def process_email():
+# 	email = request.form.get('email')
+# 	name = request.form.get('name')
+# 	email_body = request.form.get('content')
+# 	if(len(email) < 12): #7 b/c @.com is 5 charcs then 5 more just to make sure
+# 		return render_template('emailForm.html', invalidEmail = True)
+# 	else:
+# 		wholeMesg = email + '\n' + name + '\n' + email_body
+# 		smtpserver.sendmail('utdRooms@gmail.com', 'utdRooms@gmail.com', wholeMesg)
 
-@app.route('/f5', methods=['POST'])
-def process_email():
-	email = request.form.get('email')
-	name = request.form.get('name')
-	email_body = request.form.get('content')
-	if(len(email) < 12): #7 b/c @.com is 5 charcs then 5 more just to make sure
-		return render_template('emailForm.html', invalidEmail = True)
-	else:
-		wholeMesg = email + '\n' + name + '\n' + email_body
-		msg = Message('From ' + email, sender='utdRooms@gmail.com', recipients=['utdRooms@gmail.com'])
-		msg.body = wholeMesg #Customize based on user input
-		mail.send(msg)
-		return render_template('emailForm.html', emailSent = True)
+# 		return render_template('emailForm.html', emailSent = True)
+
 	
 #Another feature can be added which can help students figure out course info for next semester,Course Planner
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------
+# 'APIify' the website
+# Turn website into API
+from flask import jsonify # jsonify => returns JSON response
+
+#-----------------------------------------DATA NEEDED FOR THE FORMS-------------------------------------------------------------------
+# the API will need:
+# the building locations and full names
+# all the room numbers
+# all the course numbers and names
+# all the prof names
+
+#FOR CORS and allowing the app to be RESTful
+def after_request(response):
+  response.headers.add('Access-Control-Allow-Origin', '*')
+  response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+  response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+  response.headers.add('Access-Control-Expose-Headers', 'Authorization,X-Foobar')
+  return response
+
+@app.route('/api/data/buildingData')
+def send_buildingData():
+	return after_request(jsonify(dict(zip(sorted(all_buildings), building_names))))
+
+@app.route('/api/data/roomNumbers')
+def send_roomData():
+	return after_request(jsonify(loc_tags))
+
+
+@app.route('/api/data/courseNumbers')
+def send_courseNumbers():
+	return after_request(jsonify(sorted(set(tot_data['Course pre']))))
+
+
+@app.route('/api/data/courseNames')
+def send_courseNames():
+	return after_request(jsonify(sorted(set(tot_data['Class Name']))))
+
+@app.route('/api/data/profNames')
+def send_profNames():
+	return after_request(jsonify(list(prof_rmp_id.keys())))
+
+#-----------------------------------------------------------------------------------------------------------------------------------
+
+#------------------------------------------------API CALLS--------------------------------------------------------------------------
+@app.route('/api/timeSlots/<day>/<min_time>/<listOfBuildings>')
+def timeslots_api(day, min_time, listOfBuildings):
+	listOfBuildings = [i.upper() for i in listOfBuildings.split('&')] #locs have to be UPPERCASE
+	day = day[0].upper() + day[1:] #first letter of the day string has to be UPPERCASE
+	min_time = int(min_time) # min_time has to be INT
+	full_time_slot_data = get_timeSlots_given_loc(listOfBuildings, day, min_time)
+	dict2send = {}
+
+	for loc_data,loc in zip(full_time_slot_data, listOfBuildings):
+		dict2send[loc] = loc_data
+
+	newDict = {}
+	for key, value in dict2send.items():
+		if len(value[0]) == 0:
+			rooms_with_no_classes = {}
+		else:
+			rooms_with_no_classes = {i.lstrip():['No Classes'] for i in value[0].split(',')} # first elem
+		rooms_with_no_inter_time_slot = {i:[j] for i,j in value[1].items()}
+		rooms_with_inter_time_slot = value[2]
+		newDict[key] = {**rooms_with_no_classes,
+						**rooms_with_no_inter_time_slot,
+						**rooms_with_inter_time_slot}
+
+	formatted_dict = {} #format change
+	data_list = []
+	for key, value in newDict.items():
+		temp = {'BuildingName':key, 'Rooms':[]}
+		for key1, val1 in value.items():
+			sub_room_dict = {}
+			sub_room_dict['RoomNumber'] = key1
+			sub_room_dict['Times'] = val1
+			temp['Rooms'].append(sub_room_dict)
+
+		data_list.append(temp)
+
+	formatted_dict = {'data':data_list}
+
+	return after_request(jsonify(formatted_dict)) #return a formatted JSON object
+
+
+@app.route('/api/emptyRooms/<day>/<start_time>/<end_time>/<listOfBuildings>')
+def empty_rooms_api(day, start_time, end_time, listOfBuildings):
+	listOfBuildings = [i.upper() for i in listOfBuildings.split('&')] #locs have to be UPPERCASE
+	day = day[0].upper() + day[1:] #first letter of the day string has to be UPPERCASE
+
+	if(pd.to_datetime(start_time) == pd.to_datetime(end_time)): #will happen if times are equal
+		return after_request(jsonify({'status':'Start time equal to end time'}))
+
+	open_classes = get_open_locs(day, start_time, end_time, listOfBuildings) #gets the open locations
+
+
+	if(len(open_classes) == 0): #will happen if no rooms are found
+		return after_request(jsonify({'Data':[]}))
+
+	dict2send = {i:[] for i in listOfBuildings}
+	for loc in open_classes:
+		dict2send[loc.split(' ')[0]].append(loc)
+
+	newDict = {'Data':[]} #format change
+	for key in dict2send:
+	    temp = {}
+	    temp['Building'] = key
+	    temp['Rooms'] =dict2send[key]
+	    newDict['Data'].append(temp)
+
+	return after_request(jsonify(newDict))
+
+
+
+
+@app.route('/api/roomSch/<day>/<listOfRooms>')
+def room_sch_api(day, listOfRooms):
+	locations = [i.upper() for i in listOfRooms.split('&')] #locs have to be UPPERCASE
+	day = day[0].upper() + day[1:] #first letter of the day string has to be UPPERCASE
+
+	tot_data = classes_given_loc_day(locations,day)
+	data_dict = {i:j for i,j in zip(locations,tot_data)}
+	empty_locs = ', '.join([i for i,j in data_dict.items() if len(j) == 0])
+	locations = [i for i,j in data_dict.items() if len(j) != 0]
+
+	tot_data_to_print = {}
+	data_to_print = []
+    #adding in temp_time to hold time of last class, doing this to remove duplicate listings
+	temp_time = ''
+	for classdata in tot_data:
+
+		if (len(classdata) != 0):
+
+			for i in range(len(classdata)):
+			    temp = classdata.iloc[i]
+			    if(temp['Time'] != temp_time):
+				    class_title = temp['Class Name'] + ' '
+				    class_prof = temp['Instructor(s)'] + ' '
+				    time = temp['Time'] + ' '
+				    temp_time = temp['Time']
+				    data_to_print.append([class_title, class_prof, time])
+			    else:
+				    #skip the element if the time for that element matches the pervious time
+					#I can do this b/c the elements are ordered by time
+				    pass
+
+			tot_data_to_print[list(classdata['Location'])[0]] = data_to_print
+			data_to_print = []
+		else:
+			pass
+
+
+
+	dict2send = {'data':[]}
+	if len(empty_locs):
+	    for emp in empty_locs.split(','):
+	        dict2send['data'].append({'Room':emp, 'Schedule':[]})
+
+	if len(tot_data_to_print.keys()):
+	    for room,info in tot_data_to_print.items():
+	        temp = {'Room':room, 'Schedule':[]}
+	        for lect in info:
+	            temp['Schedule'].append({'Class': lect[0], 'Instructor': lect[1], 'Time': lect[2]})
+
+	        dict2send['data'].append(temp)
+	return after_request(jsonify(dict2send))
+
+
+@app.route('/api/courseSearch/<number>/<name>')
+def course_search_api(number, name):
+	courseByNums = [i.upper() for i in number.split('&')]
+	classNames = [i for i in name.split('&')]
+	course_form_data = get_class_data(courseByNums, classNames)
+	if(len(courseByNums) == 0 and len(classNames) == 0):
+		return after_request(jsonify({'status':'no profs found'}))
+
+
+	data_to_print = []
+	tot_data_to_print = {}
+
+	utd_grades_urls = {}
+	for course in course_form_data:
+		if(len(course) != 0):
+			user_course_name = course.iloc[0]['Class Name']
+
+			for i in range(len(course)):
+				temp = course.iloc[i]
+				classNumber = temp['Course Number']
+
+				utd_grades_urls[user_course_name] = utdGrades_baseUrl + '%20'.join(classNumber.split('.')[0].split())
+
+				profName = temp['Instructor(s)']
+				classDay = temp['Days']
+				classTime = temp['Time']
+				classLoc = temp['Location']
+
+				profLink = prof_rmp_id[remove_lead_trail_white_space(profName)]
+				utdGrades_url = utdGrades_baseUrl + '%20'.join(classNumber.split())
+
+				data_to_print.append([classNumber, profName, classDay, classTime, classLoc, profLink, utdGrades_url])
+
+			tot_data_to_print[user_course_name] = data_to_print
+			data_to_print = []
+		else:
+			pass
+
+	dict2send = {'data':[]}
+	for i in tot_data_to_print.keys():
+
+		for klass in tot_data_to_print[i]:
+			attrs = ['Name', 'Number', 'Professor', 'Days', 'Times', 'Location', 'rmp', 'utdg']
+			temp = {k:j for k,j in zip(attrs, [i]+klass)}
+
+			dict2send['data'].append({'Course':temp})
+
+	return after_request(jsonify(dict2send))
+
+
+
+
+@app.route('/api/profInfo/<profs>')
+def prof_info_api(profs):
+	profs_selected = [i for i in profs.split('&')]
+	if(len(profs_selected) == 0): #will happen if no profs are entered
+		return after_request(jsonify({'status':'no profs found'}))
+
+	prof_data = get_prof_data(profs_selected)
+
+
+	data_to_print = []
+	tot_data_to_print = []
+	for prof in prof_data:
+		if (len(prof) != 0):
+			for i in range(len(prof)):
+				temp = prof.iloc[i]
+				class_number = temp['Class SectionClass Number'] + ' '
+				class_title = temp['Class Name'] + ' '
+				class_day = temp['Days'] + ' '
+				time = temp['Time'] + ' '
+				class_loc = temp['Location'] + ' '
+
+
+
+				data_to_print.append([class_number, class_title, class_day, time, class_loc])
+
+			tot_data_to_print.append(data_to_print)
+			data_to_print = []
+		else:
+			tot_data_to_print.append('Nothing Found')
+
+
+
+	dict2send = {'data':[]}
+	for prof_name, prof_sch in zip(profs_selected, tot_data_to_print):
+		temp = {'professor':{}}
+		temp['professor']['name'] = prof_name
+		temp['professor']['rmp'] = prof_rmp_id[prof_name][0] #will have it just return the first one
+		temp['professor']['data'] = []
+		for i in prof_sch:
+			sch_dict = {'Class':i[0], 'Subject':i[1], 'Day':i[2], 'Time':i[3], 'Location':i[4]}
+			temp['professor']['data'].append(sch_dict)
+
+		dict2send['data'].append(temp)
+	return after_request(jsonify(dict2send))
+
