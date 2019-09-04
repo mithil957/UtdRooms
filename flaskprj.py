@@ -9,7 +9,7 @@ def remove_lead_trail_white_space(some_string):
 
 
 #load in the data
-tot_data = pd.read_csv('19_s_courseData_csv')
+tot_data = pd.read_csv('19_f_courseData_csv')
 
 #get rid of data with no value
 tot_data.drop(tot_data[tot_data["Time"] == ''].index, inplace=True)
@@ -20,7 +20,7 @@ all_buildings = list(set([i.split()[0] for i in tot_data['Location'].unique()]))
 #building names that will be used
 #have to change this depending how classes are allocated every semester b/c certain small buildings might not be used or
 #buildings which weren't used before might be in use now
-building_names = ['Activity Center', 'Administration', 'Arts and Humanities 1', 'Arts and Humanities 2','Edith O’Donnell Arts and Technology Building','Lloyd V. Berkner Hall','Classroom Building','Classroom Building 1', 'Classroom Building 2', 'Classroom Building 3','Callier Center Richardson', 'Callier Center Richardson', 'Callier Center Richardson Addition', 'Engineering and Computer Science North', 'Engineering and Computer Science South', 'Engineering and Computer Science West', 'Founders North', 'Founders Building', 'Cecil H. Green Hall','Karl Hoblitzelle Hall', 'Erik Jonsson Academic Center', 'Naveen Jindal School of Management','LLC', 'Eugene McDermott Library', 'Modular Lab 1' ,'Physics Building', 'Research and Operations Center', 'Research and Operations Center West', 'Science Learning Center', 'Synergy Park North','Student Services Building (Admissions)', 'Theatre']
+building_names = ['Activity Center', 'Administration', 'Arts and Humanities 1', 'Arts and Humanities 2','Edith O’Donnell Arts and Technology Building','Lloyd V. Berkner Hall','Classroom Building','Classroom Building 1', 'Classroom Building 3','Callier Center Richardson', 'Callier Center Richardson', 'Callier Center Richardson Addition', 'Engineering and Computer Science North', 'Engineering and Computer Science South', 'Engineering and Computer Science West', 'Founders North', 'Founders Building', 'Cecil H. Green Hall','Karl Hoblitzelle Hall', 'Erik Jonsson Academic Center', 'Naveen Jindal School of Management','LLC', 'Eugene McDermott Library', 'Modular Lab 1' ,'Physics Building', 'Research and Operations Center', 'Research and Operations Center West', 'Science Learning Center', 'Synergy Park North','Student Services Building (Admissions)', 'Theatre']
 #all lab locations
 
 #---------------------------------------------------------------------------------------------------------
